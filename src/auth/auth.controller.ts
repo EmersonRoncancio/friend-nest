@@ -45,7 +45,10 @@ export class AuthController {
       await validateOrReject(dto); // Valida el DTO usando class-validator
     } catch (errors) {
       const Expetion = {
-        message: errors[0].constraints,
+        message: errors.map((err: any) => {
+          const firstKey = Object.keys(err.constraints)[0];
+          return err.constraints[firstKey];
+        }),
         error: 'Bad Request',
         status: 400,
       };
