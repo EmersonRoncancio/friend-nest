@@ -21,8 +21,4 @@ export class RegisterUserDto {
 
   @IsString({ message: 'El nombre es requerido' })
   fullName: string;
-
-  @IsOptional()
-  @IsString()
-  imageProfile: string;
 }

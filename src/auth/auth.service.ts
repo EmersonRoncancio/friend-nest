@@ -11,7 +11,7 @@ export class AuthService {
     private readonly UserModel: Model<User>,
   ) {}
 
-  create(registerDto: RegisterUserDto) {
+  registerUser(registerDto: RegisterUserDto, filePath: string) {
     return registerDto;
   }
 }
