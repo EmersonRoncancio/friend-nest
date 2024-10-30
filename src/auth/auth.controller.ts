@@ -7,13 +7,12 @@ import {
   ParseFilePipe,
   FileTypeValidator,
   BadRequestException,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { FileName } from 'src/common/helpers/fileName.helper';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { RegisterUserDto } from './dto/registerUser';
 import { validateOrReject } from 'class-validator';
 

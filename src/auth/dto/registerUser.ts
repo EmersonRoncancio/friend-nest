@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class RegisterUserDto {
   @IsString({ message: 'El username es requerido' })
