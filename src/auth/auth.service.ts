@@ -39,14 +39,12 @@ export class AuthService {
       });
       return newUser;
     } catch (error) {
-      console.log(error);
       this.HandleError(error);
     }
   }
 
   private HandleError(error: any) {
     this.logger.error(error);
-    console.log(error);
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
     }
