@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { User } from './entities/auth.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { cloudinaryAdapter } from 'src/common/adapters/cloudinary.adapter';
+import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 
 @Injectable()
@@ -21,6 +22,8 @@ export class AuthService {
 
   async registerUser(registerDto: RegisterUserDto, filePath: string) {
     try {
+      const { password, ...newUserDto } = registerDto;
+
       const urlProfile = await cloudinaryAdapter.uploadImage(
         filePath,
         'profiles',
@@ -33,8 +36,11 @@ export class AuthService {
         this.logger.log('Archivo borrado correctamente');
       });
 
+      const salt = bcrypt.genSaltSync();
+
       const newUser = await this.UserModel.create({
-        ...registerDto,
+        ...newUserDto,
+        password: bcrypt.hashSync(password, salt),
         imageProfile: urlProfile.secure_url,
       });
       return newUser;
