@@ -5,6 +5,8 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  UseGuards,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -15,6 +17,9 @@ import { RegisterUserDto } from './dto/registerUser';
 import { validateOrReject } from 'class-validator';
 import { fileFilter } from 'src/common/helpers/fileFilter.helper';
 import { LoginUserDto } from './dto/update-auth.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorators/user.decorator';
+import { User } from './entities/auth.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -59,5 +64,11 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginDto: LoginUserDto) {
     return this.authService.LoginUser(loginDto);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard())
+  getUsers(@GetUser('hola') user: User) {
+    return user;
   }
 }
