@@ -14,12 +14,13 @@ import { plainToInstance } from 'class-transformer';
 import { RegisterUserDto } from './dto/registerUser';
 import { validateOrReject } from 'class-validator';
 import { fileFilter } from 'src/common/helpers/fileFilter.helper';
+import { LoginUserDto } from './dto/update-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
+  @Post('register')
   @UseInterceptors(
     FileInterceptor('profile', {
       fileFilter: fileFilter,
@@ -53,5 +54,10 @@ export class AuthController {
     }
 
     return this.authService.registerUser(dto, file.path);
+  }
+
+  @Post('login')
+  loginUser(@Body() loginDto: LoginUserDto) {
+    return this.authService.LoginUser(loginDto);
   }
 }

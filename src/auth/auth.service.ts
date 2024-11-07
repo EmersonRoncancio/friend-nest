@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterUserDto } from './dto/registerUser';
 import { Model } from 'mongoose';
@@ -11,6 +12,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { cloudinaryAdapter } from 'src/common/adapters/cloudinary.adapter';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
+import { LoginUserDto } from './dto/update-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +21,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name)
     private readonly UserModel: Model<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async registerUser(registerDto: RegisterUserDto, filePath: string) {
@@ -56,5 +60,26 @@ export class AuthService {
     }
 
     throw new InternalServerErrorException('Internal Server Error');
+  }
+
+  async LoginUser(loginDto: LoginUserDto) {
+    const { email, password } = loginDto;
+
+    const validateEmail = await this.UserModel.findOne({ email });
+    if (!validateEmail)
+      throw new UnauthorizedException('Error al iniciar sesión');
+
+    const validatePassword = bcrypt.compareSync(
+      password,
+      validateEmail.password,
+    );
+    if (!validatePassword)
+      throw new UnauthorizedException('Error al iniciar sesión');
+
+    const payload = { userId: validateEmail.id };
+
+    return {
+      token: this.jwtService.sign(payload),
+    };
   }
 }
