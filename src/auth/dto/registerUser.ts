@@ -6,7 +6,7 @@ export class RegisterUserDto {
   username: string;
 
   @IsEmail({}, { message: 'Correo invalido' })
-  @IsString({ message: 'El correo es invalido' })
+  @IsString({ message: 'El correo es requerido' })
   email: string;
 
   @MinLength(7, { message: 'Se requiere mas de 7 caracteres' })

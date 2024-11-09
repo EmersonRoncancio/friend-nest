@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import { LoginUserDto } from './dto/update-auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     @InjectModel(User.name)
     private readonly UserModel: Model<User>,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async registerUser(registerDto: RegisterUserDto, filePath: string) {
@@ -81,5 +83,21 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload),
     };
+  }
+
+  async ValidateJWT(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get('keyjwt'),
+      });
+
+      const validateUser = await this.UserModel.findById(payload.userId);
+      if (!validateUser) throw new Error();
+      return {
+        status: 'ok',
+      };
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

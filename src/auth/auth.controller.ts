@@ -7,6 +7,7 @@ import {
   BadRequestException,
   UseGuards,
   Get,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -64,6 +65,14 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginDto: LoginUserDto) {
     return this.authService.LoginUser(loginDto);
+  }
+
+  @Get('validateToken/:token')
+  validateToken(
+    @Param('token')
+    token: string,
+  ) {
+    return this.authService.ValidateJWT(token);
   }
 
   @Get()
