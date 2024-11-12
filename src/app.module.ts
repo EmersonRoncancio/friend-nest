@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { envConfigs } from './common/configs/env.configs';
+import { PublicationsModule } from './publications/publications.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { envConfigs } from './common/configs/env.configs';
     }),
     AuthModule,
     CommonModule,
+    PublicationsModule,
   ],
   controllers: [],
   providers: [],
