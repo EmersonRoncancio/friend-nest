@@ -19,6 +19,7 @@ import { GetUser } from './decorators/user.decorator';
 import { User } from './entities/auth.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +41,8 @@ export class AuthController {
     if (!fs.existsSync(uploadsDir)) {
       fs.mkdirSync(uploadsDir, { recursive: true });
     }
-    const filePath = path.join(uploadsDir, file.originalname);
+    const typeFile = file.mimetype.split('/')[1];
+    const filePath = path.join(uploadsDir, `${uuidv4()}.${typeFile}`);
     fs.writeFileSync(filePath, file.buffer);
 
     return this.authService.registerUser(registerDto, filePath);
