@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Publication } from './entities/publication.entity';
 import { CreatePublicationDto } from './dto/create-publication.dto';
+import { cloudinaryAdapter } from 'src/common/adapters/cloudinary.adapter';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class PublicationsService {
@@ -17,13 +19,28 @@ export class PublicationsService {
     files: string[],
   ) {
     try {
+      const imagesPromise = await cloudinaryAdapter.uploadImageArr(
+        files,
+        'publications',
+      );
+
+      files.forEach(async (filePath) => {
+        const exists = await fs.pathExists(filePath);
+        if (exists) {
+          await fs.unlink(filePath);
+        }
+      });
+      const images = await Promise.all(imagesPromise);
+      const urlImages = images.map((image) => image.secure_url);
+
       const newPublcation = await this.publicationModel.create({
         author: userId,
         contentDescription: createPostDto.contentDescription,
-        media: files,
+        media: urlImages,
       });
       return newPublcation;
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException();
     }
   }

@@ -14,11 +14,11 @@ export const cloudinaryAdapter = {
       folder: folder,
     });
   },
-  uploadImageArr: async (filePath: string | string[]) => {
+  uploadImageArr: async (filePath: string | string[], folder: string) => {
     if (Array.isArray(filePath)) {
       const filesArr = filePath.map((file) => {
         return cloudinary.uploader.upload(file, {
-          folder: 'Zapatos',
+          folder: folder,
         });
       });
 
