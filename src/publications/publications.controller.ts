@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,6 +19,7 @@ import { CreatePublicationDto } from './dto/create-publication.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('publications')
 export class PublicationsController {
@@ -52,5 +55,10 @@ export class PublicationsController {
       user.id,
       filesPaths,
     );
+  }
+
+  @Get()
+  getPublications(@Query() paginationdto: PaginationDto) {
+    return this.publicationsService.getPublicationsAll(paginationdto);
   }
 }

@@ -5,6 +5,7 @@ import { Publication } from './entities/publication.entity';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { cloudinaryAdapter } from 'src/common/adapters/cloudinary.adapter';
 import * as fs from 'fs-extra';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class PublicationsService {
@@ -39,6 +40,23 @@ export class PublicationsService {
         media: urlImages,
       });
       return newPublcation;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getPublicationsAll(paginationdto: PaginationDto) {
+    console.log(paginationdto);
+    const { page, limit } = paginationdto;
+    try {
+      const publications = await this.publicationModel
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .select('-__v');
+
+      return publications;
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException();
