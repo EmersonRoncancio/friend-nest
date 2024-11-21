@@ -64,6 +64,11 @@ export class AuthController {
   @Get()
   @UseGuards(AuthGuard())
   getUsers(@GetUser() user: User) {
-    return user;
+    return {
+      username: user.username,
+      email: user.email,
+      fullName: user.fullName,
+      imageProfile: user.imageProfile,
+    };
   }
 }
