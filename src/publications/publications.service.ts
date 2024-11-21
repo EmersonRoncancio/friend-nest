@@ -20,6 +20,9 @@ export class PublicationsService {
     files: string[],
   ) {
     try {
+      console.log(createPostDto);
+      console.log(files);
+      console.log(userId);
       const imagesPromise = await cloudinaryAdapter.uploadImageArr(
         files,
         'publications',
