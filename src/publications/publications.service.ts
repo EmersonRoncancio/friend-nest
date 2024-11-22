@@ -46,7 +46,6 @@ export class PublicationsService {
   }
 
   async getPublicationsAll(paginationdto: PaginationDto) {
-    console.log(paginationdto);
     const { page, limit } = paginationdto;
     try {
       const publications = await this.publicationModel
