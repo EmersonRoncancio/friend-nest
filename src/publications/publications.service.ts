@@ -41,7 +41,6 @@ export class PublicationsService {
       });
       return newPublcation;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
   }

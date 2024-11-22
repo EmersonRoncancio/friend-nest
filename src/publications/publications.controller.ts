@@ -39,9 +39,7 @@ export class PublicationsController {
     )
     files: Array<Express.Multer.File>,
   ) {
-    console.log(createPostDto);
     let filesPaths: string[] = [];
-    console.log(files);
     if (files.length > 0) {
       const uploadsDir = path.join(process.cwd(), 'static', 'uploads');
       filesPaths = files.map((file) => {
