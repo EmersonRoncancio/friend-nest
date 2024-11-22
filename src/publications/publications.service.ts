@@ -45,13 +45,14 @@ export class PublicationsService {
     }
   }
 
-  async getPublicationsAll(paginationdto: PaginationDto) {
+  async getPublicationsAll(paginationdto: PaginationDto, userId: string) {
     const { page, limit } = paginationdto;
     try {
       const publications = await this.publicationModel
-        .find()
+        .find({ author: { $ne: userId } })
         .skip((page - 1) * limit)
         .limit(limit)
+        .populate('author')
         .select('-__v');
 
       return publications;

@@ -1,7 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-@Schema()
+@Schema({
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: (doc, ret) => {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.password;
+    },
+  },
+})
 export class User extends Document {
   @Prop({
     unique: true,

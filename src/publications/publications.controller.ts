@@ -58,7 +58,11 @@ export class PublicationsController {
   }
 
   @Get()
-  getPublications(@Query() paginationdto: PaginationDto) {
-    return this.publicationsService.getPublicationsAll(paginationdto);
+  @UseGuards(AuthGuard())
+  getPublications(
+    @Query() paginationdto: PaginationDto,
+    @GetUser() user: User,
+  ) {
+    return this.publicationsService.getPublicationsAll(paginationdto, user.id);
   }
 }
